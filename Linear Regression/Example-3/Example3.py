@@ -15,10 +15,6 @@ predict = "Salary"
 X = np.array(data.drop([predict], 1))
 Y = np.array(data[predict])
 
-# creating test and train dataset
-# the test and train dataset needs to be prepared irrespective of the availability of a trained model
-x_train, x_test, y_train, y_test = model_selection.train_test_split(X, Y, test_size=0.9)
-
 # before creating the model, check whether a saved model exists or not
 # if it does, the load the model from the file and proceed to prediction
 # otherwise create the model, train the model and save the model
@@ -56,7 +52,7 @@ else:
     model = pickle.load(open("trained_model.pickle", "rb"))
 
 # calculating the accuracy of the model
-accuracy = model.score(x_test, y_test)
+accuracy = model.score(X, Y)
 print("Model Accuracy: ", accuracy)
 
 # displaying the model intercept and co-efficients
@@ -64,8 +60,14 @@ print("Intercept: ", model.intercept_)
 print("Co-efficients:", model.coef_)
 
 # making predictions using the model
-predictions = model.predict(x_test)
+predictions = model.predict(X)
 # displaying the predictions
 print("\nExperience\tActual Salary\tPredicted Salary")
 for i in range(len(predictions)):
-    print(x_test[i], "\t\t", y_test[i], "\t\t", predictions[i])
+    print(X[i], "\t\t", Y[i], "\t\t", predictions[i])
+
+# predicting a single value
+experience = 25
+new_prediction = model.predict([[experience]])
+print("Experience: ", experience, " Predicted Salary: ", new_prediction[0])
+
